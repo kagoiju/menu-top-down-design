@@ -1,36 +1,72 @@
+# menu_simple.py - Итерация 3: Полная реализация логики меню
+
 from menu_template import start_menu
-# Итерация 1: Заглушки
+import sys # Импорт для exit(0)
+
+# --- Функции действий (f1, f2, g1, g2) ---
 
 def menu_f1():
-    print('--> Вызвана функция f1 (заглушка)')
-    
+    print('*** Вычисление: f1(x) ***')
+    input("Нажмите Enter, чтобы продолжить...", )
+
 def menu_f2():
-    print('--> Вызвана функция f2 (заглушка)')
+    print('*** Вычисление: f2(x) ***')
+    input("Нажмите Enter, чтобы продолжить...", )
 
 def menu_g1():
-    print('--> Вызвана функция g1 (заглушка)')
-    
+    print('*** Вычисление: g1(x) ***')
+    input("Нажмите Enter, чтобы продолжить...", )
+
 def menu_g2():
-    print('--> Вызвана функция g2 (заглушка)')
+    print('*** Вычисление: g2(x) ***')
+    input("Нажмите Enter, чтобы продолжить...", )
+
+# --- Подменю ---
 
 def menu_sub1():
-    """Подменю 1: Однократное действие и возврат"""
-    print('*** Вызвано menu_sub1 (заглушка) ***')
-    # Здесь должен быть код для вызова f1 или f2
-    
+    """
+    Однократное выполнение действия и возврат в главное меню (is_break=True).
+    """
+    caption_start = "=== menu_sub1 === \n 1) f1(x) \n 2) f2(x) \n 0) return \n"
+    caption_err = 'Ошибка ввода. Попробуйте снова.'
+    menu_template = {
+        0: (lambda: print("Возврат в главное меню..."), True), # is_break=True -> выход
+        1: (menu_f1, True),   # is_break=True -> выход после выполнения
+        2: (menu_f2, True)}   # is_break=True -> выход после выполнения
+        
+    start_menu(caption_start, caption_err, menu_template)
+
+
 def menu_sub2():
-    """Подменю 2: Циклическое действие"""
-    print('*** Вызвано menu_sub2 (заглушка) ***')
-    # Здесь должен быть код для вызова g1 или g2
+    """
+    Циклическое. Возврат в главное меню только через пункт 0 (is_break=False).
+    """
+    caption_start = "=== menu_sub2 === \n 1) g1(x) \n 2) g2(x) \n 0) return \n"
+    caption_err = 'Ошибка ввода. Попробуйте снова.'
+    menu_template = {
+        0: (lambda: print("Возврат в главное меню..."), True), # is_break=True -> выход
+        1: (menu_g1, False),  # is_break=False -> остаемся в меню
+        2: (menu_g2, False)}  # is_break=False -> остаемся в меню
     
+    start_menu(caption_start, caption_err, menu_template)
+
+# --- Главное меню ---
+
 def menu_main():
-    """Главное меню"""
-    print('--- Запуск menu_main (заглушка) ---')
-    # Здесь должен быть цикл для вызова sub1 или sub2
-    start_menu('Main menu input prompt', 'Error prompt', {}) # Имитация вызова
-    
-# Точка входа
+    """
+    Циклическое. Выход из меню только через пункт 0.
+    """
+    caption_start = "=== menu_main === \n 1) menu_sub1 \n 2) menu_sub2 \n 0) exit \n"
+    caption_err = 'Ошибка ввода. Попробуйте снова.'
+    menu_template = {
+        0: (lambda: print("Завершение программы."), True), # is_break=True -> выход
+        1: (menu_sub1, False), # is_break=False -> остаемся в меню
+        2: (menu_sub2, False)} # is_break=False -> остаемся в меню
+        
+    start_menu(caption_start, caption_err, menu_template)
+
+# --- Точка входа ---
+
 if __name__ == "__main__":
-    from menu_template import start_menu # Пока что это не сработает, но готовимся
     menu_main()
-    print('--- Выход из программы ---')
+    sys.exit(0)
